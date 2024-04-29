@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo1.mapper.FilmsMapper">
+
+    <select id="queryAll" resultType="com.example.demo1.entity.Films">
+        select * from filmviedo.film limit #{page},#{limit}
+    </select>
+
+    <select id="count" resultType="java.lang.Long">
+        select count(id) from filmviedo.film
+    </select>
+
+    <select id="AllFilm" resultType="com.example.demo1.entity.Films">
+        select * from filmviedo.film
+    </select>
+
+    <select id="selectfilmByISDN" parameterType="int" resultType="com.example.demo1.entity.Films">
+          select * from filmviedo.film where id = #{id}
+    </select>
+
+    <select id="selectfilmByDir" parameterType="string" resultType="com.example.demo1.entity.Films">
+          select * from filmviedo.film where director like #{director}
+    </select>
+
+    <select id="selectfilmBytype" parameterType="string" resultType="com.example.demo1.entity.Films">
+          select * from filmviedo.film where type = #{type}
+    </select>
+
+    <insert id="AddFilm" parameterType="com.example.demo1.entity.Films">
+        insert into filmviedo.film (id,name,director,actor,type,country,language,score,photo,href,description) values (#{id},#{name},#{director},#{actor},#{type},#{country},#{language},#{score},#{photo},#{href},#{description})
+    </insert>
+
+    <update id="upFilm" parameterType="com.example.demo1.entity.Films">
+        update filmviedo.film set name=#{name},director=#{director},actor=#{actor},type=#{type},country=#{country},language=#{language},score=#{score},description=#{description} where id = #{id}
+    </update>
+
+    <delete id="DelFilm" parameterType="int">
+        delete from filmviedo.film where  id=#{id}
+    </delete>
+
+    <select id="searchFilms" parameterType="string" resultType="com.example.demo1.entity.Films">
+        SELECT * FROM filmviedo.film WHERE name LIKE CONCAT('%', #{keyword}, '%')
+    </select>
+
+</mapper>

@@ -1,0 +1,86 @@
+<!-- <!doctype html> -->
+<html class="x-admin-sm">
+	<head>
+		<meta charset="UTF-8">
+		<title>学分管理平台</title>
+		<link rel="stylesheet" href="./X-admin/css/font.css">
+		<link rel="stylesheet" href="./X-admin/css/login.css ">
+		<link rel="stylesheet" href="./X-admin/css/xadmin.css">
+		<script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+		<script src="./X-admin/lib/layui/layui.js" charset="utf-8"></script>
+	</head>
+	<body class="login-bg">
+		<div class="login layui-anim layui-anim-up">
+			<div class="message">学分管理平台</div>
+			<div class="message">管理人员后台</div>
+			<div id="darkbannerwrap"></div>
+
+			<form method="post" class="layui-form">
+				<input name="adminnum" placeholder="用户名admin" type="text" lay-verify="required" class="layui-input">
+				<hr class="hr15">
+				<input name="adminpaw" lay-verify="required" placeholder="密码123456" type="password" class="layui-input">
+				<hr class="hr15">
+				<input value="登录" lay-submit lay-filter="login" style="width:100%;" type="submit">
+				<hr class="hr20">
+				  <a href="#forget" style="float: right; "></a></br>
+			</form>
+			<div style="padding-left: 270px;padding-top: 20px;"><a style="color:red;" onclick="uppassword()" href="login.html">学生登录</a></div>
+		</div>
+
+		<script src="https://cdn.staticfile.org/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+
+		<script>
+			
+			// function uppassword() {
+			// 	layui.use('layer',function(){
+			// 		  	let layer=layui.layer
+			// 		  	layer.open({
+			// 		  		title:'修改密码',
+			// 		  		type:2,
+			// 		  		area:['50%','60%'],
+			// 		  		content:"newpass.html"
+			// 		  	});
+			// 	})	
+			// };
+			
+			layui.use(['form'], function() {
+				let form = layui.form
+				form.on('submit(login)', function(data) {
+					let field = data.field; // {adminname:"",password:""}
+				       //向服务器发起登录请求
+					$.ajax({
+						url: "http://localhost:8080/admin/login",
+						type: "POST",
+						dataType: "JSON", //要求服务端必须返回JSON数据格式
+						contentType: "application/json", //说明前段发送的是json格式数据
+						data: JSON.stringify(field),
+						success: function(res) {
+							console.log(res)
+							//如果登录成功，跳转至主页面；登录失败，
+							if (res.code == 0) {
+								//将数据放在cookie中
+								//将res.data转化成JSON字符串
+								//<button type="button" class="layui-btn layui-btn-primary" lay-on="test-msg-dark">深色提示框</button>
+								layer.msg("登录成功",{icon:6})
+								$.cookie("userinfo",JSON.stringify(res.data), {path: "/"})
+								window.location.href = "manageindex.html"
+								
+							} else {
+								layer.msg("用户名或者密码错误", {icon: 5})
+							
+							}
+
+						}
+					})
+
+					return false; // 阻止默认 form 跳转
+				});
+
+			})
+		</script>
+		<!-- 底部结束 -->
+		
+		
+
+	</body>
+</html>

@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		
+		
+		<title>学分管理平台</title>
+		<link rel="stylesheet" href="./layui-v2.8.17/layui/css/layui.css">
+		<link rel="stylesheet" href="./X-admin/css/font.css">
+		<link rel="stylesheet" href="./X-admin/css/xadmin.css">
+		
+		<script src="./X-admin/lib/layui/layui.js" charset="utf-8"></script>
+		
+		
+		
+		
+		<script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+		<script src="./X-admin/lib/layui/layui.js" charset="utf-8"></script>
+		<script type="text/javascript" src="./X-admin/js/xadmin.js"></script>
+		
+	</head>
+	<body>
+		
+		
+		<script src="X-admin/lib/layui/lay/modules/layer.js"></script>
+		
+		<div class="x-nav">
+			<span class="layui-breadcrumb">
+				<a href="">首页</a>
+				<a href="">学分管理</a>
+				<a>
+					<cite>学分情况</cite></a>
+			</span>
+			<a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"
+				onclick="location.reload()" title="刷新">
+				<i class="layui-icon layui-icon-refresh" style="line-height:30px"></i></a>
+		</div>
+		<!-- 搜索框模块 -->
+		
+		
+		<div class="layui-card-body ">
+			<form class="layui-form layui-col-space5">
+			
+				<div class="layui-inline layui-show-xs-block">
+					<input type="text" id="searchInput" placeholder="请输入学生名" autocomplete="off"
+						class="layui-input" name="keyword">
+				</div>
+				<div class="layui-inline layui-show-xs-block">
+					<button class="layui-btn" lay-submit="" lay-filter="sreach"><i
+							class="layui-icon" id="searchButton">&#xe615;</i></button>
+				</div>
+				<!-- <div>
+					<input type="text" id="searchInput" placeholder="请输入关键字">
+					<button id="searchButton">搜索</button>
+				</div> -->
+			</form>
+		</div>
+		<!-- 功能按钮 -->
+		<div class="layui-card-header">
+			<button class="layui-btn layui-btn-danger" onclick="delAll()"><i
+					class="layui-icon"></i>批量删除</button>
+			<button class="layui-btn" onclick="xadmin.open('添加学生信息','studentadd.html',800,600)"><i
+					class="layui-icon"></i>添加</button>
+		</div>
+		<div class="layui-card-body ">
+			<table class="layui-table layui-form" id="film" lay-filter="film"></table>
+		</div>
+
+		<script src="./layui-v2.8.17/layui/layui.js"></script>
+		
+		
+		
+		
+		<script type="text/html" id="film-bar">
+			<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+			<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="edit">编辑</a>
+		</script>
+		
+	</body>
+	<script>
+		
+		
+		
+		
+		layui.use(function() {
+			let table = layui.table
+			let form = layui.form
+			
+			// 搜索框功能
+			form.on('submit(sreach)', function(data) {
+				
+				table.reload('film', {
+				  url: 'http://localhost:8080/Manage/search',
+				 
+				  where:data.field
+				  
+				});
+				console.log(data);
+				return false;	
+			});
+			// 执行一个 table 实例
+			table.render({
+				elem: '#film',
+				height: 600,
+				url: 'http://localhost:8080/Manage/stumessagelist' //数据接口（此处为静态数据，仅作演示）
+					,
+				title: '申报学分',
+				page: true //开启分页
+					,
+				toolbar: 'default' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
+					,
+				totalRow: true //开启合计行
+					,
+				cols: [
+					[ //表头
+						{
+							type: 'checkbox',
+							fixed: 'left'
+						},
+						{
+							field: 'stuid',
+							title: '学生id',
+							//width: 80,
+							sort: true,
+							fixed: 'left',
+							align:'center'
+							//totalRow: '合计：'
+						},
+						{
+							field: 'stunum',
+							title: '学生学号',
+							align:'center'
+							//width: 180
+						},
+						{
+							field: 'stuname',
+							title: '学生姓名',
+							align:'center'
+							//width: 90,
+					
+						},
+						{
+							field: 'stusex',
+							title: '性别',
+							align:'center'
+							//width: 80,
+							
+						},
+						{
+							field: 'stuage',
+							title: '年龄',
+							align:'center'
+							//width: 100,
+							
+						},
+						{
+							field: 'stuclass',
+							title: '班级',
+							align:'center'
+							//width: 80
+						},
+						{
+							
+							title: '操作',
+							//width: 150,
+							align: 'center',
+							toolbar: '#film-bar',
+							align:'center'
+						}
+				
+					]
+				]
+			});
+		
+			//行工具栏
+			//触发单元格工具事件
+			  table.on('tool(film)', function(obj){ // 双击 toolDouble
+			    var data = obj.data;
+			    //console.log(obj)
+			    if(obj.event === 'del'){
+			      layer.confirm('真的删除么', function(index){
+				
+					  $.ajax({
+						  url:"http://localhost:8080/Manage/"+data.stuid,
+						  type:"DELETE",
+						  dataType:"JSON",
+						  contentType:"application/json",
+						  success:function(res){
+							  if(res.code==0){
+								  obj.del();
+								  layer.msg("SUCCESS",{icon:6})
+							  }else{
+								  layer.msg("FAILED",{icon:5})
+							  }
+							  
+						  }
+					  						  	
+					  	
+					  })
+					  
+					  
+			 
+			        layer.close(index);
+			      });
+			    } else if (obj.event === 'edit') {
+					layer.open({
+						title: '编辑',
+						type: 2,
+						area: ['50%', '80%'],
+						content: "./student-edit.html",
+						success: function(layero, index){
+						    let body = layer.getChildFrame('body', index);
+						    body.find('#stuid').val(data.stuid)
+							body.find('#stunum').val(data.stunum)
+							body.find('#stuname').val(data.stuname)
+							body.find('#stusex').val(data.stusex)
+							body.find('#stuage').val(data.stuage)
+							body.find('#stuclass').val(data.stuclass)
+							
+						  }
+					});
+				}
+			  });
+			
+	
+	    // 搜索框功能
+	  
+	
+		})
+		
+		
+	
+	</script>
+	
+
+	
+	<!-- <script>
+		
+	    $(document).ready(function(){
+	        // 监听搜索按钮点击事件
+	        $("#searchButton").on("click", function(){
+	            // 获取输入框中的关键字
+	            var keyword = $("#searchInput").val();
+	
+	            // 发起搜索请求，将关键字发送到后端进行处理
+	            $.ajax({
+	                url: "http://localhost:8082/Films/search",  // 替换为实际的后端搜索接口URL
+	                type: "GET",  // 使用GET请求
+	                data: {
+	                    keyword: keyword  // 将关键字作为参数传递给后端
+	                },
+					contentType:"application/json",
+	                success: function(response){
+	                    // 处理搜索结果，将搜索结果展示到页面上
+	                    console.log("搜索结果:", response);
+						
+							let table = layui.table
+							table.reload('film', {
+							                    data: response, // 返回的搜索结果数据
+							                    page: true // 重新开启分页（如果数据不足一页，分页会隐藏）
+							                });
+							// 在页面上展示搜索结果，例如更新表格数据、显示搜索结果列表等
+						
+						 
+	                },
+	                error: function(error){
+	                    // 处理搜索失败的情况，例如显示错误信息
+	                    console.error("搜索失败:", error);
+	                    // 显示错误信息到页面上，通知用户搜索失败
+	                }
+	            });
+	        });
+	    });
+	</script>
+ -->
+</html>
+

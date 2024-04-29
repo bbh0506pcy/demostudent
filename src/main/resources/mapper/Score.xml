@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo1.mapper.ScoreMapper">
+
+
+
+
+    <select id="AllScore" resultType="com.example.demo1.entity.Score">
+        select * from filmviedo.scores
+    </select>
+
+    <select id="count" resultType="java.lang.Long">
+        select count(scoreid) from filmviedo.scores
+    </select>
+
+
+    <insert id="AddTypes" parameterType="com.example.demo1.entity.Types">
+        insert into filmviedo.types (id,type) values (#{id},#{type})
+    </insert>
+
+    <update id="upTypes" parameterType="com.example.demo1.entity.Types">
+        update filmviedo.types set type=#{type} where id = #{id}
+    </update>
+
+    <delete id="DelTypes" parameterType="int">
+        delete from filmviedo.types where  id=#{id}
+    </delete>
+
+    <select id="searchTypes" parameterType="string" resultType="com.example.demo1.entity.Types">
+        SELECT * FROM filmviedo.types WHERE type LIKE CONCAT('%', #{keyword}, '%')
+    </select>
+
+</mapper>
