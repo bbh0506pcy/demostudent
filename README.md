@@ -11,6 +11,7 @@
 系统模块：主要任务是登录、修改密码。  
 学生管理模块：对申报信息进行管理。  
 管理员管理模块：对学生申报信息、课程信息、学生个人信息进行管理。  
-![E-R图](C:\Users\85993\Desktop\1.png)  
+![E-R图](https://github.com/bbh0506pcy/demostudent/blob/master/1.png)   
 ## 界面  
-## 登录界面
+## 登录界面  
+![登录图](https://github.com/bbh0506pcy/demostudent/blob/master/2.png)
