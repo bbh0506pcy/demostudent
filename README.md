@@ -14,4 +14,17 @@
 ![E-R图](https://github.com/bbh0506pcy/demostudent/blob/master/1.png)   
 ## 界面  
 ## 登录界面  
-![登录图](https://github.com/bbh0506pcy/demostudent/blob/master/2.png)
+![登录图](https://github.com/bbh0506pcy/demostudent/blob/master/7.png)
+## 主界面
+![](https://github.com/bbh0506pcy/demostudent/blob/master/3.png)  
+## 密码修改界面
+![](https://github.com/bbh0506pcy/demostudent/blob/master/2.png)  
+## 信息编辑界面
+![](https://github.com/bbh0506pcy/demostudent/blob/master/5.png)
+## 删除界面
+![](https://github.com/bbh0506pcy/demostudent/blob/master/6.png)
+## 平台
+windows操作系统
+## 环境要求
+idk1.8以上
+mysql 8.0以上
